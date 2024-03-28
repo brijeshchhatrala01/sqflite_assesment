@@ -69,12 +69,13 @@ class RowTextField extends StatelessWidget {
   final String fieldName;
   final String hintText;
   final TextEditingController controller;
+  final TextInputType? keyboardType;
 
   const RowTextField(
       {super.key,
       required this.fieldName,
       required this.hintText,
-      required this.controller});
+      required this.controller,required this.keyboardType});
 
   @override
   Widget build(BuildContext context) {
@@ -93,6 +94,7 @@ class RowTextField extends StatelessWidget {
             child: TextFormField(
               controller: controller,
               validator: nullCheckValidator,
+              keyboardType: keyboardType,
               decoration: InputDecoration(
                 errorBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: errorColor),
@@ -140,12 +142,16 @@ class ShowRowFields extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        Text(fieldName),
-        Text(databaseValue.toString()),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(fieldName),
+          Text(databaseValue.toString()),
+        ],
+      ),
     );
   }
 }

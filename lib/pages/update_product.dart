@@ -1,7 +1,6 @@
 import 'package:assesment_app/database/inventory_database.dart';
 import 'package:assesment_app/log/log_helper.dart';
 import 'package:assesment_app/model/inventory_model.dart';
-import 'package:assesment_app/pages/homepage.dart';
 import 'package:assesment_app/theme/text.dart';
 import 'package:assesment_app/util/widgets.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +10,7 @@ import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 class UpdateProduct extends StatefulWidget {
   final String barcodeNumber;
   final String username;
-  UpdateProduct({super.key, required this.barcodeNumber,required this.username});
+  const UpdateProduct({super.key, required this.barcodeNumber,required this.username});
 
   @override
   State<UpdateProduct> createState() => _UpdateProductState();
@@ -91,25 +90,25 @@ class _UpdateProductState extends State<UpdateProduct> {
               RowTextField(
                 fieldName: "Product",
                 hintText: "Name",
-                controller: _productNameController,
+                controller: _productNameController, keyboardType: TextInputType.name,
               ),
               sizedBoxMedium,
               RowTextField(
                 fieldName: "Catagory",
                 hintText: "Catagory",
-                controller: _catagoryController,
+                controller: _catagoryController, keyboardType: TextInputType.text,
               ),
               sizedBoxMedium,
               RowTextField(
                 fieldName: "Price",
                 hintText: "\$ Price",
-                controller: _priceController,
+                controller: _priceController, keyboardType: TextInputType.number,
               ),
               sizedBoxMedium,
               RowTextField(
                   fieldName: "Numbers",
                   hintText: "Add Barcode Number",
-                  controller: _barcodeController),
+                  controller: _barcodeController, keyboardType: TextInputType.number,),
               sizedBoxMedium,
               MyAppButton(onPressed: () async {
                 var res = await Navigator.push(
@@ -156,14 +155,13 @@ class _UpdateProductState extends State<UpdateProduct> {
                                     onPressed: () {
                                       context.pop();
                                     },
-                                    child: Text('OK'))
+                                    child: const Text('OK'))
                               ],
                             );
                           },
                         );
                       }
                       Navigator.pop(context);
-                      print("Product Added");
                       _barcodeController.clear();
                       _catagoryController.clear();
                       _priceController.clear();

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 Color appBarColor = Colors.lightGreen.shade300;
 List<Color> loginPageBackground = [Colors.green.shade100, Colors.green.shade50];
+List<Color> dialogueGredient = [Colors.yellow.shade100,Colors.green.shade50];
 Color forgetPasswordColor = Colors.green.shade400;
 Color whiteColor = Colors.white;
 Color headerTextColor = Colors.green;

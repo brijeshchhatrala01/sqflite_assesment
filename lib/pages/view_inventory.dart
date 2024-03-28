@@ -27,11 +27,9 @@ class _ViewInventoryState extends State<ViewInventory> {
         recivedDataList = await inventoryDatabase.fetchAllProduct();
         recivedPriceList = await inventoryDatabase.sumOfPrice();
 
-        recivedPriceList.forEach(
-          (element) {
+        for (var element in recivedPriceList) {
             sum += int.parse(element['item_price'].toString());
-          },
-        );
+          }
         setState(() {});
       },
     );

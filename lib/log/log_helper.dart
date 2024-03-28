@@ -1,4 +1,4 @@
-// ignore_for_file: constant_identifier_names
+// ignore_for_file: constant_identifier_names, prefer_typing_uninitialized_variables, non_constant_identifier_names, unnecessary_brace_in_string_interps
 
 import 'dart:io';
 
@@ -56,6 +56,6 @@ class LoggingHelper {
   //add particular message on log file
   Future<File> writeLog(String msg) async {
     final file = await localFile;
-    return file.writeAsString(msg,mode: FileMode.append);
+    return file.writeAsString("\n\n${msg}",mode: FileMode.append);
   }
 }

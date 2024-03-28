@@ -9,7 +9,7 @@ import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 
 class ProductDetails extends StatefulWidget {
   final String username;
-  ProductDetails({super.key,required this.username});
+  const ProductDetails({super.key,required this.username});
 
   @override
   State<ProductDetails> createState() => _ProductDetailsState();
@@ -69,25 +69,25 @@ class _ProductDetailsState extends State<ProductDetails> {
               RowTextField(
                 fieldName: "Product",
                 hintText: "Name",
-                controller: _productNameController,
+                controller: _productNameController, keyboardType: TextInputType.name,
               ),
               sizedBoxMedium,
               RowTextField(
                 fieldName: "Catagory",
                 hintText: "Catagory",
-                controller: _catagoryController,
+                controller: _catagoryController, keyboardType: TextInputType.text,
               ),
               sizedBoxMedium,
               RowTextField(
                 fieldName: "Price",
                 hintText: "\$ Price",
-                controller: _priceController,
+                controller: _priceController, keyboardType: TextInputType.number,
               ),
               sizedBoxMedium,
               RowTextField(
                   fieldName: "Numbers",
                   hintText: "Add Barcode Number",
-                  controller: _barcodeController),
+                  controller: _barcodeController, keyboardType: TextInputType.number,),
               sizedBoxMedium,
               MyAppButton(
                   onPressed: () async {

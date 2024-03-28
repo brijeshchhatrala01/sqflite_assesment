@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 class UserModel {
   final String first_name;
   final String last_name;

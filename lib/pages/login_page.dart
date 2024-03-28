@@ -1,15 +1,17 @@
+import 'dart:async';
+
 import 'package:assesment_app/database/inventory_database.dart';
 import 'package:assesment_app/log/log_helper.dart';
+import 'package:assesment_app/pages/forget_password.dart';
 import 'package:assesment_app/pages/homepage.dart';
 import 'package:assesment_app/pages/register.dart';
 import 'package:assesment_app/theme/colors.dart';
 import 'package:assesment_app/theme/text.dart';
 import 'package:assesment_app/util/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({super.key});
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -39,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
 
   bool isUserValid = false;
 
-  Map<String, Object?> userData = {};
+  Map<String, Object?>? userData = {};
 
   //fetch login data from database by username
   void fetchData() {
@@ -48,16 +50,33 @@ class _LoginPageState extends State<LoginPage> {
       () async {
         userData = await inventoryDatabase.checkUser(_usernameController.text);
         setState(() {
-          if (userData['username'].toString() ==
-              _usernameController.text &&
-              userData['password'].toString() ==
-                  _passwordController.text) {
-            isUserValid = !isUserValid;
-            loggingHelper.writeLog(
-                "Logged In Successfully : ${_usernameController.text}");
+          if (userData != null) {
+            if (_usernameController.text == userData!['username'].toString() &&
+                _passwordController.text == userData!['password'].toString()) {
+              isUserValid = !isUserValid;
+              loggingHelper.writeLog(
+                  "Logged In Successfully : ${_usernameController.text}");
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Homepage(
+                      username:
+                      _usernameController.text),
+                ),
+              );
+            } else {
+              ScaffoldMessenger.of(context)
+                ..removeCurrentSnackBar()
+                ..showSnackBar(
+                  const SnackBar(content: Text("Invalid Credential!")));
+            }
           }
           else {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Login Failed")));
+            ScaffoldMessenger.of(context)
+              ..removeCurrentSnackBar()
+              ..showSnackBar(
+                  const SnackBar(content: Text("Invalid Credential!")));
+
           }
         });
       },
@@ -66,6 +85,7 @@ class _LoginPageState extends State<LoginPage> {
 
   //form GlobalKey to check validation
   final _formKey = GlobalKey<FormState>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -77,102 +97,101 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
       body: SingleChildScrollView(
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(colors: loginPageBackground),
-          ),
-          child: Form(
-            key: _formKey,
-            child: Padding(
-              padding: const EdgeInsets.all(32.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Center(
-                    child: Image.asset(
-                      imageLogo,
-                      width: 200,
-                      height: 200,
-                    ),
-                  ),
-                  Text(
-                    "Inventory",
-                    style: textHeaderStyle,
-                  ),
-                  sizedBoxSmall,
-                  TextFormField(
-                    controller: _usernameController,
-                    validator: nullCheckValidator,
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: errorColor)),
-                      focusedErrorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: errorColor)),
-                      errorStyle: errorTextStyle,
-                      prefixIcon: const Icon(Icons.person),
-                      labelText: "User Name",
-                      labelStyle: lableStyle,
-                    ),
-                  ),
-                  sizedBoxSmall,
-                  TextFormField(
-                    controller: _passwordController,
-                    validator: nullCheckValidator,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: errorColor)),
-                      focusedErrorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: errorColor)),
-                      errorStyle: errorTextStyle,
-                      prefixIcon: const Icon(Icons.lock),
-                      labelText: "Password",
-                      labelStyle: lableStyle,
-                    ),
-                  ),
-                  sizedBoxSmall,
-                  MyAppButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        fetchData();
-                        isUserValid ? Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                Homepage(username: _usernameController.text),
+              child: Container(
+                height: MediaQuery.of(context).size.height,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(colors: loginPageBackground),
+                ),
+                child: Form(
+                  key: _formKey,
+                  child: Padding(
+                    padding: const EdgeInsets.all(32.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Center(
+                          child: Image.asset(
+                            imageLogo,
+                            width: 200,
+                            height: 200,
                           ),
-                        ) : null;
-                      }
-                    },
-                    name: 'Login',
-                  ),
-                  sizedBoxSmall,
-                  TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      "Forgot Password ?",
-                      style: forgotPasswordTextStyle,
+                        ),
+                        Text(
+                          "Inventory",
+                          style: textHeaderStyle,
+                        ),
+                        sizedBoxSmall,
+                        TextFormField(
+                          controller: _usernameController,
+                          validator: nullCheckValidator,
+                          decoration: InputDecoration(
+                            border: const OutlineInputBorder(),
+                            errorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: errorColor)),
+                            focusedErrorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: errorColor)),
+                            errorStyle: errorTextStyle,
+                            prefixIcon: const Icon(Icons.person),
+                            labelText: "User Name",
+                            labelStyle: lableStyle,
+                          ),
+                        ),
+                        sizedBoxSmall,
+                        TextFormField(
+                          controller: _passwordController,
+                          validator: nullCheckValidator,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            border: const OutlineInputBorder(),
+                            errorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: errorColor)),
+                            focusedErrorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: errorColor)),
+                            errorStyle: errorTextStyle,
+                            prefixIcon: const Icon(Icons.lock),
+                            labelText: "Password",
+                            labelStyle: lableStyle,
+                          ),
+                        ),
+                        sizedBoxSmall,
+                        MyAppButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              fetchData();
+                            }
+                          },
+                          name: 'Login',
+                        ),
+                        sizedBoxSmall,
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => ForgetPassword(),));
+                          },
+                          child: Text(
+                            "Forgot Password ?",
+                            style: forgotPasswordTextStyle,
+                          ),
+                        ),
+                        sizedBoxSmall,
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const RegisterPage(),
+                                ));
+                          },
+                          child: Text(
+                            "Register Hear",
+                            style: forgotPasswordTextStyle,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  sizedBoxSmall,
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const RegisterPage(),));
-                    },
-                    child: Text(
-                      "Register Hear",
-                      style: forgotPasswordTextStyle,
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
-          ),
-        ),
-      ),
+            )
     );
   }
 }

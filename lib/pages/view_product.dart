@@ -274,6 +274,7 @@ class _ViewProductState extends State<ViewProduct> {
           });
           reciveDataByBarcode = {};
           showDialog(
+            // ignore: use_build_context_synchronously
             context: context,
             builder: (context) {
               return AlertDialog(
@@ -281,7 +282,7 @@ class _ViewProductState extends State<ViewProduct> {
                 actions: [
                   ElevatedButton(
                     onPressed: () {
-                      context.pop();
+                     Navigator.pop(context);
                     },
                     child: const Text('OK'),
                   ),

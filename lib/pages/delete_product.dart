@@ -229,6 +229,7 @@ class _DeleteProductState extends State<DeleteProduct> {
           });
           reciveDataByBarcode = {};
           showDialog(
+            // ignore: use_build_context_synchronously
             context: context,
             builder: (context) {
               return AlertDialog(
@@ -236,7 +237,7 @@ class _DeleteProductState extends State<DeleteProduct> {
                 actions: [
                   ElevatedButton(
                     onPressed: () {
-                      context.pop();
+                      Navigator.pop(context);
                     },
                     child: const Text('OK'),
                   ),

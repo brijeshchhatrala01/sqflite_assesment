@@ -10,27 +10,28 @@ import 'package:assesment_app/theme/text.dart';
 import 'package:assesment_app/util/widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class Homepage extends StatefulWidget {
   final String username;
-  const Homepage({super.key,required this.username});
+  const Homepage({super.key, required this.username});
 
   @override
   State<Homepage> createState() => _HomepageState();
 }
 
 class _HomepageState extends State<Homepage> {
-
-  Map<String,Object?> userData = {};
+  Map<String, Object?>? userData = {};
 
   InventoryDatabase inventoryDatabase = InventoryDatabase();
 
   @override
   void initState() {
-    Future.delayed(const Duration(milliseconds: 300),() async {
-      userData = await inventoryDatabase.checkUser(widget.username);
-    },);
+    Future.delayed(
+      const Duration(milliseconds: 300),
+      () async {
+        userData = await inventoryDatabase.checkUser(widget.username);
+      },
+    );
     super.initState();
   }
 
@@ -43,35 +44,61 @@ class _HomepageState extends State<Homepage> {
           style: textStyleAppbar,
         ),
         actions: [
-          IconButton(onPressed: () {
-              showCupertinoModalPopup(context: context, builder: (context) {
-                return AlertDialog(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  title: Text("User Information",style: textHeaderStyle,),
-                  content: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    sizedBoxSmall,
-                    Text("First Name : ${userData['first_name'].toString()}"),
-                    sizedBoxSmall,
-                    Text("Last Name : ${userData['last_name'].toString()}"),
-                    sizedBoxSmall,
-                    Text("Email : ${userData['email'].toString()}"),
-                    sizedBoxSmall,
-                    Text("Username : ${userData['username'].toString()}"),
-                  ],
-                ),
-                  actions: [
-                    ElevatedButton(onPressed: () {
-                      Navigator.pop(context);
-                    }, child: Text('OK'))
-                  ],
+          IconButton(
+              onPressed: () {
+                showCupertinoModalPopup(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                      title: Text(
+                        "User Information",
+                        style: textHeaderStyle,
+                      ),
+                      content: Container(
+                        height: MediaQuery.of(context).size.height / 3,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(colors: dialogueGredient),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              sizedBoxSmall,
+                              ShowRowFields(fieldName: "First Name ", databaseValue: "${userData!['first_name'].toString()}"),
+                              sizedBoxSmall,
+                              ShowRowFields(fieldName: "Last Name ", databaseValue: "${userData!['last_name'].toString()}"),
+                              sizedBoxSmall,
+                              ShowRowFields(fieldName: "Email ", databaseValue: "${userData!['email'].toString().substring(0,9)}..."),
+                              sizedBoxSmall,
+                              ShowRowFields(fieldName: "Username ", databaseValue: "${userData!['username'].toString()}"),
+                            ],
+                          ),
+                        ),
+                      ),
+                      actions: [
+                        ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('OK'))
+                      ],
+                    );
+                  },
                 );
-              },);
-          }, icon: const Icon(Icons.person)),
+              },
+              icon: const Icon(Icons.person)),
           IconButton(
             onPressed: () {
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage(),));
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LoginPage(),
+                  ));
               LoggingHelper().writeLog('Logout Sucessfully ${widget.username}');
             },
             icon: const Padding(
@@ -125,7 +152,13 @@ class _HomepageState extends State<Homepage> {
                 children: [
                   GridButton(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetails(username: widget.username.toString(),),));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProductDetails(
+                              username: widget.username.toString(),
+                            ),
+                          ));
                     },
                     iconData: Icons.add,
                     iconBackGround: addButtonBackground,
@@ -133,7 +166,13 @@ class _HomepageState extends State<Homepage> {
                   ),
                   GridButton(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) =>  DeleteProduct(username: widget.username.toString(),),));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DeleteProduct(
+                              username: widget.username.toString(),
+                            ),
+                          ));
                     },
                     iconData: Icons.delete,
                     iconBackGround: deleteBackground,
@@ -141,7 +180,12 @@ class _HomepageState extends State<Homepage> {
                   ),
                   GridButton(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) =>  ViewProduct(username: widget.username.toString()),));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ViewProduct(
+                                username: widget.username.toString()),
+                          ));
                     },
                     iconData: Icons.find_replace,
                     iconBackGround: viewProductBG,
@@ -149,7 +193,11 @@ class _HomepageState extends State<Homepage> {
                   ),
                   GridButton(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const ViewInventory(),));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ViewInventory(),
+                          ));
                     },
                     iconData: Icons.currency_exchange,
                     iconBackGround: viewInventoryBG,

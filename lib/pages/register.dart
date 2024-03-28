@@ -2,12 +2,10 @@ import 'package:assesment_app/database/inventory_database.dart';
 import 'package:assesment_app/log/log_helper.dart';
 import 'package:assesment_app/model/user_model.dart';
 import 'package:assesment_app/pages/homepage.dart';
-import 'package:assesment_app/pages/login_page.dart';
 import 'package:assesment_app/theme/colors.dart';
 import 'package:assesment_app/theme/text.dart';
 import 'package:assesment_app/util/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -43,10 +41,15 @@ class _RegisterPageState extends State<RegisterPage> {
     return value!.isEmpty ? "Please Enter Password" :  value != confirmPassController.text ? "Password Doesn't Match" : null;
   }
 
+  bool isValidEmail(String email) {
+    return  RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email);
+  }
+
   //database file object
   InventoryDatabase inventoryDatabase = InventoryDatabase();
 
   LoggingHelper loggingHelper = LoggingHelper();
+
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +105,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 sizedBoxSmall,
                 TextFormField(
                   controller: emailController,
-                  validator: nullCheckValidator,
+                  validator: (value) => isValidEmail(value!) ? null : "Check Your Email",
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),
                     errorBorder: OutlineInputBorder(

@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:assesment_app/model/inventory_model.dart';
 import 'package:assesment_app/model/user_model.dart';
 import 'package:path/path.dart';
@@ -117,9 +119,9 @@ class InventoryDatabase {
     database.insert(TABLEUSER, userModel.toMap(),conflictAlgorithm: ConflictAlgorithm.abort);
   }
 
-  Future<Map<String,Object?>> checkUser(String username) async {
+  Future<Map<String,Object?>?> checkUser(String username) async {
     database = await getDatabaseObject();
     var listData = await database.query(TABLEUSER,where: "username = ?",whereArgs: [username]);
-    return listData.first;
+    return listData.firstOrNull;
   }
 }
